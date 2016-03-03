@@ -1,0 +1,31 @@
+{
+  "name": "postcss-ri-columns",
+  "version": "0.1.0",
+  "description": "Generates responsive immutable column utility classes",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test.js | tap-spec"
+  },
+  "keywords": [
+    "css",
+    "postcss",
+    "postcss-plugin",
+    "grid"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "postcss": "^4.1.16",
+    "tap-spec": "^2.2.2",
+    "tape": "^3.5.0"
+  },
+  "homepage": "https://github.com/maxshearer/postcss-ri-columns",
+  "author": {
+    "name": "Max Shearer",
+    "email": "max@shearer.co",
+    "url": "https://github.com/maxshearer"
+  },
+  "repository": "maxshearer/postcss-ri-columns",
+  "dependencies": {
+    "postcss": "^4.1.11"
+  }
+}
