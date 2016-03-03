@@ -32,7 +32,7 @@ gulp.task('styles', function(){
 input.css
 ```css
 .width- {
-    width: ri-colums;
+    width: ri-columns;
 }
 ```
 
