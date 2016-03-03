@@ -7,26 +7,26 @@ PostCSS plugin to create responsive immutable column utility classes wow that's 
 ## Usage
 gulpfile.js
 ```js
-    var postcss = require('postcss'),
-        riCols = require('postcss-ri-columns');
+var postcss = require('postcss'),
+    riCols = require('postcss-ri-columns');
 
-    gulp.task('styles', function(){
-        var processors = [
-            riCols({
-                columns: 12,
-                separator: '\\/',
-                breakpoints: {
-                    'sm': '30em',
-                    'md': '45em',
-                    'lg': '60em',
-                }
-            })
-        ];
+gulp.task('styles', function(){
+    var processors = [
+        riCols({
+            columns: 12,
+            separator: '\\/',
+            breakpoints: {
+                'sm': '30em',
+                'md': '45em',
+                'lg': '60em',
+            }
+        })
+    ];
 
-        gulp.src('input.css')
-            .pipe(postcss(processors))
-            .pipe(gulp.dest('output.css';))
-    });
+    gulp.src('input.css')
+        .pipe(postcss(processors))
+        .pipe(gulp.dest('output.css';))
+});
 ```
 
 input.css
