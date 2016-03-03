@@ -1,5 +1,5 @@
 # postcss-ri-columns
-PostCSS plugin to create responsive immutable column utility classes wow that's a lot of buzzwords without breathing.
+PostCSS plugin to create responsive immutable column utility classes wow that's a lot of buzzwords without breathing. If the idea of this seems a bit daft then [this article](http://csswizardry.com/2013/02/responsive-grid-systems-a-solution/) will hopefully make it seem more sensible.
 
 ## Install
 `npm install postcss-ri-columns --save-dev`
