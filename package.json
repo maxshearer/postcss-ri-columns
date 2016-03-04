@@ -1,7 +1,7 @@
 {
   "name": "postcss-ri-columns",
-  "version": "0.1.0",
-  "description": "Generates responsive immutable column utility classes",
+  "version": "0.2.0",
+  "description": "Generates responsive immutable column classes",
   "main": "index.js",
   "scripts": {
     "test": "tape test.js | tap-spec"
@@ -26,6 +26,7 @@
   },
   "repository": "maxshearer/postcss-ri-columns",
   "dependencies": {
-    "postcss": "^4.1.11"
+    "postcss": "^4.1.11",
+    "postcss-value-parser": "^3.3.0"
   }
 }
