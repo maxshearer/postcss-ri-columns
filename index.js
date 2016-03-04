@@ -1,6 +1,7 @@
 'use strict';
 
-var postcss = require('postcss');
+var postcss = require('postcss'),
+    valueParser = require('postcss-value-parser');
 
 module.exports = postcss.plugin('postcss-ri-columns', function (opts) {
     opts = opts || {};
@@ -13,10 +14,21 @@ module.exports = postcss.plugin('postcss-ri-columns', function (opts) {
             css.walkDecls(function (decl) {
                 if (decl.value.indexOf('ri-columns') !== -1) {
 
+                    // Check to see if a number of colums has been passed
+                    // otherwise fallback to the default
+                    var riCols = valueParser(decl.value),
+                        columns = opts.columns;
+
+                    riCols.walk(function(node) {
+                        if (!isNaN(parseInt(node.value))) {
+                            columns = parseInt(node.value);
+                        }
+                    });
+
                     // One non-mq specific set of rules
-                    for (var i = 0; i < opts.columns; i++) {
-                        var sel = decl.parent.selector + (i+1) + opts.separator + opts.columns,
-                            val = ((i+1) / opts.columns * 100).toFixed(5) + '%';
+                    for (var i = 0; i < columns; i++) {
+                        var sel = decl.parent.selector + (i+1) + opts.separator + columns,
+                            val = ((i+1) / columns * 100).toFixed(5) + '%';
 
                         var rule = postcss.rule({
                                 selector: sel
@@ -40,9 +52,9 @@ module.exports = postcss.plugin('postcss-ri-columns', function (opts) {
                                 params: '(min-width:'+ opts.breakpoints[bpKey] +')'
                             });
 
-                            for (var i = 0; i < opts.columns; i++) {
-                                var sel = decl.parent.selector + bpKey + '-' + (i+1) + opts.separator + opts.columns,
-                                    val = ((i+1) / opts.columns * 100).toFixed(5) + '%';
+                            for (var i = 0; i < columns; i++) {
+                                var sel = decl.parent.selector + bpKey + '-' + (i+1) + opts.separator + columns,
+                                    val = ((i+1) / columns * 100).toFixed(5) + '%';
 
                                 var rule = postcss.rule({
                                         selector: sel
