@@ -10,74 +10,70 @@ module.exports = postcss.plugin('postcss-ri-columns', function (opts) {
     opts.separator = opts.separator ||  '\\/';
 
     return function(css) {
-        try {
-            css.walkDecls(function (decl) {
-                if (decl.value.indexOf('ri-columns') !== -1) {
+        css.walkDecls(function (decl) {
+            if (decl.value.indexOf('ri-columns') !== -1) {
 
-                    // Check to see if a number of colums has been passed
-                    // otherwise fallback to the default
-                    var riCols = valueParser(decl.value),
-                        columns = opts.columns;
+                // Check to see if a number of colums has been passed
+                // otherwise fallback to the default
+                var riCols = valueParser(decl.value),
+                    columns = opts.columns;
 
-                    riCols.walk(function(node) {
-                        if (!isNaN(parseInt(node.value))) {
-                            columns = parseInt(node.value);
+                riCols.walk(function(node) {
+                    if (!isNaN(parseInt(node.value))) {
+                        columns = parseInt(node.value);
+                    }
+                });
+
+                // One non-mq specific set of rules
+                for (var i = 0; i < columns; i++) {
+                    var sel = decl.parent.selector + (i+1) + opts.separator + columns,
+                        val = ((i+1) / columns * 100).toFixed(5) + '%';
+
+                    var rule = postcss.rule({
+                            selector: sel
+                        }).append({
+                            prop: decl.prop,
+                            value: val
+                        });
+
+                    // Add to compiled CSS
+                    css.append(rule);
+                }
+
+
+                // Loop through specified breapoints if they exist
+                if (opts.breakpoints || typeof opts.breakpoints !== 'Object') {
+                    for (var bpKey in opts.breakpoints) {
+
+                        // Set up the relevant media query
+                        var mq = postcss.atRule({
+                            name: 'media',
+                            params: '(min-width:'+ opts.breakpoints[bpKey] +')'
+                        });
+
+                        for (var i = 0; i < columns; i++) {
+                            var sel = decl.parent.selector + bpKey + '-' + (i+1) + opts.separator + columns,
+                                val = ((i+1) / columns * 100).toFixed(5) + '%';
+
+                            var rule = postcss.rule({
+                                    selector: sel
+                                }).append({
+                                    prop: decl.prop,
+                                    value: val
+                                });
+
+                            // Append rule into media query
+                            mq.append(rule);
                         }
-                    });
-
-                    // One non-mq specific set of rules
-                    for (var i = 0; i < columns; i++) {
-                        var sel = decl.parent.selector + (i+1) + opts.separator + columns,
-                            val = ((i+1) / columns * 100).toFixed(5) + '%';
-
-                        var rule = postcss.rule({
-                                selector: sel
-                            }).append({
-                                prop: decl.prop,
-                                value: val
-                            });
 
                         // Add to compiled CSS
-                        css.append(rule);
+                        css.append(mq);
                     }
+                }
 
-
-                    // Loop through specified breapoints if they exist
-                    if (opts.breakpoints || typeof opts.breakpoints !== 'Object') {
-                        for (var bpKey in opts.breakpoints) {
-
-                            // Set up the relevant media query
-                            var mq = postcss.atRule({
-                                name: 'media',
-                                params: '(min-width:'+ opts.breakpoints[bpKey] +')'
-                            });
-
-                            for (var i = 0; i < columns; i++) {
-                                var sel = decl.parent.selector + bpKey + '-' + (i+1) + opts.separator + columns,
-                                    val = ((i+1) / columns * 100).toFixed(5) + '%';
-
-                                var rule = postcss.rule({
-                                        selector: sel
-                                    }).append({
-                                        prop: decl.prop,
-                                        value: val
-                                    });
-
-                                // Append rule into media query
-                                mq.append(rule);
-                            }
-
-                            // Add to compiled CSS
-                            css.append(mq);
-                        }
-                    }
-
-                    // Get rid of initial declaration as it's not needed anymore
-                    decl.parent.remove();
-    			}
-            });
-        } catch (e) {
-            console.error(e);
-        }
+                // Get rid of initial declaration as it's not needed anymore
+                decl.parent.remove();
+			}
+        });
     }
 });
