@@ -1,6 +1,6 @@
 {
   "name": "postcss-ri-columns",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Generates responsive immutable column classes",
   "main": "index.js",
   "scripts": {
