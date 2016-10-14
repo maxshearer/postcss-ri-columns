@@ -11,9 +11,8 @@ module.exports = postcss.plugin('postcss-ri-columns', function (opts) {
 
     return function(css) {
         css.walkDecls(function (decl) {
-            if (decl.value.indexOf('ri-columns') !== -1) {
-
-                // Check to see if a number of colums has been passed
+            if (decl.value.indexOf('ri-columns') > -1) {
+                // Check to see if a number of columns has been passed
                 // otherwise fallback to the default
                 var riCols = valueParser(decl.value),
                     columns = opts.columns;
@@ -33,15 +32,15 @@ module.exports = postcss.plugin('postcss-ri-columns', function (opts) {
                             selector: sel
                         }).append({
                             prop: decl.prop,
-                            value: val
+                            value: val,
+                            important: decl.important
                         });
 
                     // Add to compiled CSS
                     css.append(rule);
                 }
 
-
-                // Loop through specified breapoints if they exist
+                // Loop through specified breakpoints if they exist
                 if (opts.breakpoints || typeof opts.breakpoints !== 'Object') {
                     for (var bpKey in opts.breakpoints) {
 
@@ -51,6 +50,20 @@ module.exports = postcss.plugin('postcss-ri-columns', function (opts) {
                             params: '(min-width:'+ opts.breakpoints[bpKey] +')'
                         });
 
+                        // First do a zeroed version so you can cancel out offsets
+                        var sel = decl.parent.selector + bpKey + '-0' + opts.separator + columns,
+                            val = '0';
+
+                        var rule = postcss.rule({
+                                selector: sel
+                            }).append({
+                                prop: decl.prop,
+                                value: val,
+                                important: decl.important
+                            });
+
+                        mq.append(rule);
+
                         for (var i = 0; i < columns; i++) {
                             var sel = decl.parent.selector + bpKey + '-' + (i+1) + opts.separator + columns,
                                 val = ((i+1) / columns * 100).toFixed(5) + '%';
@@ -59,7 +72,8 @@ module.exports = postcss.plugin('postcss-ri-columns', function (opts) {
                                     selector: sel
                                 }).append({
                                     prop: decl.prop,
-                                    value: val
+                                    value: val,
+                                    important: decl.important
                                 });
 
                             // Append rule into media query
