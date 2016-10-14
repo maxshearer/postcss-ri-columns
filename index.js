@@ -11,8 +11,7 @@ module.exports = postcss.plugin('postcss-ri-columns', function (opts) {
 
     return function(css) {
         css.walkDecls(function (decl) {
-            if (decl.value.indexOf('ri-columns') !== -1) {
-
+            if (decl.value.indexOf('ri-columns') > -1) {
                 // Check to see if a number of columns has been passed
                 // otherwise fallback to the default
                 var riCols = valueParser(decl.value),
@@ -33,7 +32,8 @@ module.exports = postcss.plugin('postcss-ri-columns', function (opts) {
                             selector: sel
                         }).append({
                             prop: decl.prop,
-                            value: val
+                            value: val,
+                            important: decl.important
                         });
 
                     // Add to compiled CSS
@@ -58,7 +58,8 @@ module.exports = postcss.plugin('postcss-ri-columns', function (opts) {
                                 selector: sel
                             }).append({
                                 prop: decl.prop,
-                                value: val
+                                value: val,
+                                important: decl.important
                             });
 
                         mq.append(rule);
@@ -71,7 +72,8 @@ module.exports = postcss.plugin('postcss-ri-columns', function (opts) {
                                     selector: sel
                                 }).append({
                                     prop: decl.prop,
-                                    value: val
+                                    value: val,
+                                    important: decl.important
                                 });
 
                             // Append rule into media query

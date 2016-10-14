@@ -1,5 +1,6 @@
 # 0.3.0
 
+* Will now notice !important declarations
 * Added a zeroed rule for if offsets need to be cancelled at certain breakpoints (e.g. `.offset--3/12 .offset--md-0/12`)
 
 # 0.2.1
